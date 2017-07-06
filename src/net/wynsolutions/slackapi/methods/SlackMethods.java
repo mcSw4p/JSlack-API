@@ -189,4 +189,8 @@ public class SlackMethods {
 	public static String usersProfileGet = slackAddress + "users.profile.get",
 			usersProfileSet = slackAddress + "users.profile.set";
 	
+	public static void setBaseURL(String url){
+		slackAddress = url;
+	}
+	
 }

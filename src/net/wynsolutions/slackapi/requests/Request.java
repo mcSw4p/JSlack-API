@@ -41,12 +41,19 @@ public class Request {
 	private RequestBot bot;
 	private RequestChannel channel;
 	private RequestChat chat;
+	private RequestDnd dnd;
+	private RequestEmoji emoji;
+	private RequestFile file;
 	
 	public Request() {
 		this.tests = new RequestTest(this);
 		this.auth = new RequestAuth(this);
 		this.bot = new RequestBot(this);
 		this.channel = new RequestChannel(this);
+		this.chat = new RequestChat(this);
+		this.dnd = new RequestDnd(this);
+		this.emoji = new RequestEmoji(this);
+		this.file = new RequestFile(this);
 	}
 	
 	/**
@@ -124,6 +131,52 @@ public class Request {
 	 */
 	public RequestChat chat(){
 		return this.chat;
+	}
+	
+	/**
+	 * <h2>dnd()</h2>
+	 * 
+	 * <p>This method returns a class containing API calls 
+	 * for fetching to Do Not Disturb settings of users.</p>
+	 * </br>
+	 * 
+	 * <p>https://api.slack.com/methods#dnd</p>
+	 * 
+	 * @return
+	 */
+	public RequestDnd dnd(){
+		return this.dnd;
+	}
+	
+	/**
+	 * <h2>emoji()</h2>
+	 * 
+	 * <p>This method returns a class containing API calls 
+	 * for fetching emojis.</p>
+	 * </br>
+	 * 
+	 * <p>https://api.slack.com/methods#emoji</p>
+	 * 
+	 * @return
+	 */
+	public RequestEmoji emoji(){
+		return this.emoji;
+	}
+	
+	/**
+	 * <h2>files()</h2>
+	 * 
+	 * <p>This method returns a class containing API calls 
+	 * for getting/creating/uploading files and comments.</p>
+	 * </br>
+	 * 
+	 * <p>https://api.slack.com/methods#files</br>
+	 * https://api.slack.com/methods#files.comments</p>
+	 * 
+	 * @return
+	 */
+	public RequestFile files(){
+		return this.file;
 	}
 	
 	/**

@@ -29,10 +29,10 @@ import net.wynsolutions.slackapi.methods.SlackMethods;
  */
 public class RequestChat {
 
-	private static Request req;
+	private Request req;
 	
 	public RequestChat(Request request) {
-		req = request;
+		this.req = request;
 	}
 	
 	/**
@@ -60,7 +60,7 @@ public class RequestChat {
 		para.put("ts", timeStamp);
 		para.put("channel", channelId);
 		para.put("as_user", asUser);
-		return req.post(SlackMethods.chatDelete, para);
+		return this.req.post(SlackMethods.chatDelete, para);
 	}
 	
 	/**
@@ -84,7 +84,7 @@ public class RequestChat {
 		para.put("token", Slack.SLACK_TOKEN);
 		para.put("channel", channelId);
 		para.put("text", text);
-		return req.post(SlackMethods.chatMeMessage, para);
+		return this.req.post(SlackMethods.chatMeMessage, para);
 	}
 	
 	/**
@@ -166,7 +166,7 @@ public class RequestChat {
 		para.put("icon_emoji", iconEmoji);
 		para.put("thread_ts", threadTs);
 		para.put("reply_broadcast", replyBroadcast);
-		return req.post(SlackMethods.chatPostMessage, para);
+		return this.req.post(SlackMethods.chatPostMessage, para);
 	}
 	
 	/**
@@ -204,7 +204,7 @@ public class RequestChat {
 		para.put("ts", timeStamp);
 		para.put("unfurls", unfurls);
 		para.put("user_auth_required", userAuth);
-		return req.post(SlackMethods.chatUnfurl, para);
+		return this.req.post(SlackMethods.chatUnfurl, para);
 	}
 	
 	/**
@@ -240,7 +240,7 @@ public class RequestChat {
 		para.put("parse", parse);
 		para.put("link_names", linkNames);
 		para.put("as_user", asUser);
-		return req.post(SlackMethods.chatUpdate, para);
+		return this.req.post(SlackMethods.chatUpdate, para);
 	}
 	
 }

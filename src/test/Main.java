@@ -29,6 +29,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		new Slack("xoxp-193348182086-192469169731-202575321760-675ec8c906bce32cdabe5adf7d9d42d5");
+		Slack.setAPIURL("https://slack.com/api/");
 		
 		if(apiTest()){
 			Slack.getLogger().log(Level.INFO, "API TEST METHOD - PASS");

@@ -2,6 +2,7 @@ package net.wynsolutions.slackapi;
 
 import java.util.logging.Logger;
 
+import net.wynsolutions.slackapi.methods.SlackMethods;
 import net.wynsolutions.slackapi.requests.Request;
 
 /**
@@ -33,10 +34,14 @@ public class Slack {
 	private static Logger logger = Logger.getLogger("Slack");
 	
 	public Slack(String token) {
-		
 		SLACK_TOKEN = token;
-		
 		requests = new Request();
+	}
+	
+	@SuppressWarnings("static-access")
+	public Slack(String token, String baseURL) {
+		Slack s = new Slack(token);
+		s.setAPIURL(baseURL);
 	}
 	
 	public static Request requests(){
@@ -49,6 +54,10 @@ public class Slack {
 
 	public static void setLogger(Logger logger) {
 		Slack.logger = logger;
+	}
+	
+	public static void setAPIURL(String baseUrl){
+		SlackMethods.setBaseURL(baseUrl);
 	}
 	
 }
