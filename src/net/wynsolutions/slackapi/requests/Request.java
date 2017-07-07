@@ -36,6 +36,7 @@ import net.wynsolutions.slackapi.Slack;
  */
 public class Request {
 
+	// Request topic class variables
 	private RequestTest tests;
 	private RequestAuth auth;
 	private RequestBot bot;
@@ -44,8 +45,13 @@ public class Request {
 	private RequestDnd dnd;
 	private RequestEmoji emoji;
 	private RequestFile file;
+	private RequestGroup group;
+	private RequestIm im;
+	private RequestMpim mpim;
+	private RequestOAuth oauth;
 	
 	public Request() {
+		// Init request topic class variables
 		this.tests = new RequestTest(this);
 		this.auth = new RequestAuth(this);
 		this.bot = new RequestBot(this);
@@ -54,6 +60,10 @@ public class Request {
 		this.dnd = new RequestDnd(this);
 		this.emoji = new RequestEmoji(this);
 		this.file = new RequestFile(this);
+		this.group = new RequestGroup(this);
+		this.im = new RequestIm(this);
+		this.mpim = new RequestMpim(this);
+		this.oauth = new RequestOAuth(this);
 	}
 	
 	/**
@@ -180,7 +190,67 @@ public class Request {
 	}
 	
 	/**
-	 * <h2>executeGet(targetURL)</h2>
+	 * <h2>group()</h2>
+	 * 
+	 * <p>This method returns a class containing API calls 
+	 * for getting info on your teams private channels.</p>
+	 * </br>
+	 * 
+	 * <p>https://api.slack.com/methods#groups</p>
+	 * 
+	 * @return
+	 */
+	public RequestGroup groups(){
+		return this.group;
+	}
+	
+	/**
+	 * <h2>im()</h2>
+	 * 
+	 * <p>This method returns a class containing API calls 
+	 * for getting info on your direct messages.</p>
+	 * </br>
+	 * 
+	 * <p>https://api.slack.com/methods#im</p>
+	 * 
+	 * @return
+	 */
+	public RequestIm im(){
+		return this.im;
+	}
+	
+	/**
+	 * <h2>mpim()</h2>
+	 * 
+	 * <p>This method returns a class containing API calls 
+	 * for getting info on your multiparty direct messages.</p>
+	 * </br>
+	 * 
+	 * <p>https://api.slack.com/methods#mpim</p>
+	 * 
+	 * @return
+	 */
+	public RequestMpim mpim(){
+		return this.mpim;
+	}
+	
+	/**
+	 * <h2>oauth()</h2>
+	 * 
+	 * <p>This method returns a class containing API calls 
+	 * for exchanging temporary oauth tokens.</p>
+	 * </br>
+	 * 
+	 * <p>https://api.slack.com/methods#oauth</p>
+	 * 
+	 * @return
+	 */
+	public RequestOAuth oauth(){
+		return this.oauth;
+	}
+	
+	/**
+	 * <h2>get(targetURL)</h2>
 	 * 
 	 * <p>This method sends a GET request to the specified URL.</p>
 	 * 
@@ -189,43 +259,11 @@ public class Request {
 	 * @return JSONObject
 	 */
 	public JSONObject get(String targetURL) {
-		HttpURLConnection connection = null;
-		JSONParser parser = new JSONParser();
-		Slack.getLogger().log(Level.INFO, "Fetching data from \"" + targetURL + "\".");
-		
-		try {
-			connection = (HttpURLConnection) new URL(targetURL).openConnection();
-			
-			connection.setRequestMethod("GET");
-			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-			connection.setRequestProperty("Content-Language", "en-US");
-			connection.setUseCaches(false);
-			connection.setDoOutput(true);
-
-			InputStream is = connection.getInputStream();
-			BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-			StringBuffer response = new StringBuffer();
-			String line;
-			while ((line = rd.readLine()) != null) {
-				response.append(line);
-				response.append('\r');
-			}
-			
-			rd.close();
-			return (JSONObject) parser.parse(response.toString());
-
-		} catch (Exception e) {
-			Slack.getLogger().log(Level.WARNING, "Error fetching data from \"" + targetURL + "\"\n" + e.getStackTrace().toString());
-			return null;
-		} finally {
-			if(connection != null) 
-				connection.disconnect();
-			Slack.getLogger().log(Level.INFO, "Closed connection...");
-		}
+		return request(targetURL, null, "GET");
 	}
 	
 	/**
-	 * <h2>executePost(targetURL, urlParameters)</h2>
+	 * <h2>post(targetURL, urlParameters)</h2>
 	 * 
 	 * <p>This method sends a POST request to the specified URL with 
 	 * the specified parameters.</p>
@@ -236,33 +274,56 @@ public class Request {
 	 * @return JSONObject
 	 */
 	public JSONObject post(String targetURL, Map<String, Object> urlParameters) {
+		return request(targetURL, urlParameters, "POST");
+	}
+	
+	/**
+	 * <h2>request(targetURL, urlParameters, method)</h2>
+	 * 
+	 * <p>This method sends a request to the specified URL with 
+	 * the specified parameters and method.</p>
+	 * 
+	 * @param targetURL
+	 * @param urlParameters
+	 * @param request
+	 * 
+	 * @return JSONObject
+	 */
+	public JSONObject request(String targetURL, Map<String, Object> urlParameters, String method){
 		HttpURLConnection connection = null;
 		JSONParser parser = new JSONParser();
-		Slack.getLogger().log(Level.INFO, "Fetching data from \"" + targetURL + "\".");
 		
 		try {
-			URL url = new URL(targetURL);
-			connection = (HttpURLConnection) url.openConnection();
+			connection = (HttpURLConnection) new URL(targetURL).openConnection();
 			
-			connection.setRequestMethod("POST");
+			connection.setRequestMethod(method);
 			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-			connection.setRequestProperty("Content-Length", Integer.toString(urlParameters.toString().getBytes().length));
+			if(urlParameters != null)
+				connection.setRequestProperty("Content-Length", Integer.toString(urlParameters.toString().getBytes().length));
 			connection.setRequestProperty("Content-Language", "en-US");
 			connection.setUseCaches(false);
 			connection.setDoOutput(true);
 			
-			StringBuilder postData = new StringBuilder();
-	        for (Map.Entry<String,Object> param : urlParameters.entrySet()) {
-	            if (postData.length() != 0) postData.append('&');
-	            postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
-	            postData.append('=');
-	            postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
-	        }
-			
-			DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-			wr.write(postData.toString().getBytes("UTF-8"));
-			wr.close();
+			if(urlParameters != null) {
+				StringBuilder postData = new StringBuilder();
+				for (Map.Entry<String, Object> param : urlParameters.entrySet()) {
+					if (postData.length() != 0)
+						postData.append('&');
+					postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
+					postData.append('=');
+					postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
+				}
 
+				DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+				wr.write(postData.toString().getBytes("UTF-8"));
+				wr.close();
+				Slack.getLogger().log(Level.INFO, "Fetching data from \'" + connection.getURL().toString() + "?" + postData.toString()+ "\'");
+			}else{
+				Slack.getLogger().log(Level.INFO, "Fetching data from \'" + connection.getURL().toString() + "\'");
+			}
+			
+			
+			
 			InputStream is = connection.getInputStream();
 			BufferedReader rd = new BufferedReader(new InputStreamReader(is));
 			StringBuffer response = new StringBuffer();

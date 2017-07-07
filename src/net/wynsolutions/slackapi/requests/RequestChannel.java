@@ -128,8 +128,9 @@ public class RequestChannel {
 	/**
 	 * <h2>info(channelId)</h2>
 	 * 
-	 * <p>This method returns information about a team channel.To retrieve 
-	 * information on a private channel, use groups.info.</p>
+	 * <p>This method returns information about a team channel.
+	 * To retrieve information on a private channel, use 
+	 * groups.info.</p>
 	 * 
 	 * https://api.slack.com/methods/channels.info
 	 * <h2>URL Parameters: </h2>
@@ -175,15 +176,16 @@ public class RequestChannel {
 	/**
 	 * <h2>join(channelName, validate)</h2>
 	 * 
-	 * <p>This method is used to join a channel. If the channel does 
-	 * not exist, it is created.</p>
+	 * <p>This method is used to join a channel. If the 
+	 * channel does not exist, it is created.</p>
 	 * 
 	 * https://api.slack.com/methods/channels.join
 	 * <h2>URL Parameters: </h2>
 	 * 
 	 * <p>Name: Name of channel to join.</br>
-	 * Validate: Whether to return errors on invalid channel name instead 
-	 * of modifying it to meet the specified criteria.</p>
+	 * Validate: Whether to return errors on invalid 
+	 * channel name instead of modifying it to meet 
+	 * the specified criteria.</p>
 	 * 
 	 * @param channelName
 	 * @param validate
@@ -201,8 +203,8 @@ public class RequestChannel {
 	/**
 	 * <h2>kick(channelId, userId)</h2>
 	 * 
-	 * <p>This method allows a user to remove another member from a 
-	 * team channel.</p>
+	 * <p>This method allows a user to remove another 
+	 * member from a team channel.</p>
 	 * 
 	 * https://api.slack.com/methods/channels.kick
 	 * <h2>URL Parameters: </h2>
@@ -247,19 +249,22 @@ public class RequestChannel {
 	/**
 	 * <h2>list(excludeArchived, excludeMembers)</h2>
 	 * 
-	 * <p>This method returns a list of all channels in the team. This includes 
-	 * channels the caller is in, channels they are not currently in, and archived 
-	 * channels but does not include private channels. The number of (non-deactivated) 
-	 * members in each channel is also returned.</br>
+	 * <p>This method returns a list of all channels in the team. 
+	 * This includes channels the caller is in, channels they are 
+	 * not currently in, and archived channels but does not include 
+	 * private channels. The number of (non-deactivated) members in 
+	 * each channel is also returned.</br>
 	 * To retrieve a list of private channels, use groups.list.</br>
-	 * Having trouble getting a HTTP 200 response from this method? Try excluding 
-	 * the members list from each channel object using the exclude_members parameter.</p>
+	 * Having trouble getting a HTTP 200 response from this method? 
+	 * Try excluding the members list from each channel object using 
+	 * the exclude_members parameter.</p>
 	 * 
 	 * https://api.slack.com/methods/channels.list
 	 * <h2>URL Parameters: </h2>
 	 * 
 	 * <p>ExcludeArchive: Exclude archived channels from the list</br>
-	 * ExcludeMembers: Exclude the members collection from each channel.</p>
+	 * ExcludeMembers: Exclude the members collection from each 
+	 * channel.</p>
 	 * 
 	 * @param excludeArchived
 	 * @param excludeMembers
@@ -301,17 +306,19 @@ public class RequestChannel {
 	/**
 	 * <h2>rename(channelId, channelName, validate)</h2>
 	 * 
-	 * <p>This method renames a team channel. The only people who can rename a channel 
-	 * are Team Admins, or the person that originally created the channel. Others will 
-	 * receive a "not_authorized" error.</p>
+	 * <p>This method renames a team channel. The only people who 
+	 * can rename a channel are Team Admins, or the person that 
+	 * originally created the channel. Others will receive a 
+	 * "not_authorized" error.</p>
 	 * 
 	 * https://api.slack.com/methods/channels.rename
 	 * <h2>URL Parameters: </h2>
 	 * 
 	 * <p>Channel: Channel to rename.</br>
 	 * ChannelName: New name for channel.</br>
-	 * Validate: Whether to return errors on invalid channel name instead of modifying 
-	 * it to meet the specified criteria.</p>
+	 * Validate: Whether to return errors on invalid channel 
+	 * name instead of modifying it to meet the specified 
+	 * criteria.</p>
 	 * 
 	 * @param channelId
 	 * @param channelName
@@ -331,12 +338,13 @@ public class RequestChannel {
 	/**
 	 * <h2>replies(channelId, threadTs)</h2>
 	 * 
-	 * <p>This method returns an entire thread (a message plus all the messages in reply 
-	 * to it).</p>
-	 * <p>The channel and thread_ts arguments are always required. thread_ts must be the 
-	 * timestamp of an existing message with 0 or more replies. If there are no replies 
-	 * then just the single message referenced by thread_ts will be returned - it is just 
-	 * an ordinary message.</p>
+	 * <p>This method returns an entire thread (a message plus all 
+	 * the messages in reply to it).</p>
+	 * <p>The channel and thread_ts arguments are always required. 
+	 * thread_ts must be the timestamp of an existing message with 
+	 * 0 or more replies. If there are no replies then just the 
+	 * single message referenced by thread_ts will be returned - 
+	 * it is just an ordinary message.</p>
 	 * 
 	 * https://api.slack.com/methods/channels.replies
 	 * <h2>URL Parameters: </h2>
@@ -360,7 +368,8 @@ public class RequestChannel {
 	/**
 	 * <h2>setPurpose(channelId, purpose)</h2>
 	 * 
-	 * <p>This method is used to change the purpose of a channel. The calling user must be a member of the channel.</p>
+	 * <p>This method is used to change the purpose of a channel. 
+	 * The calling user must be a member of the channel.</p>
 	 * 
 	 * https://api.slack.com/methods/channels.setPurpose
 	 * <h2>URL Parameters: </h2>
@@ -384,7 +393,8 @@ public class RequestChannel {
 	/**
 	 * <h2>setTopic(channelId, topic)</h2>
 	 * 
-	 * <p>This method is used to change the topic of a channel. The calling user must be a member of the channel.</p>
+	 * <p>This method is used to change the topic of a channel. 
+	 * The calling user must be a member of the channel.</p>
 	 * 
 	 * https://api.slack.com/methods/channels.setTopic
 	 * <h2>URL Parameters: </h2>
@@ -408,7 +418,8 @@ public class RequestChannel {
 	/**
 	 * <h2>unarchive(channelId)</h2>
 	 * 
-	 * <p>This method unarchives a channel. The calling user is added to the channel.</p>
+	 * <p>This method unarchives a channel. The calling user 
+	 * is added to the channel.</p>
 	 * 
 	 * https://api.slack.com/methods/channels.unarchive
 	 * <h2>URL Parameters: </h2>
