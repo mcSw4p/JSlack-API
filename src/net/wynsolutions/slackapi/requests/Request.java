@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -49,6 +51,10 @@ public class Request {
 	private RequestIm im;
 	private RequestMpim mpim;
 	private RequestOAuth oauth;
+	private RequestPin pin;
+	private RequestReaction reaction;
+	
+	private List<String> validRequestMethods = new ArrayList<String>();
 	
 	public Request() {
 		// Init request topic class variables
@@ -64,6 +70,16 @@ public class Request {
 		this.im = new RequestIm(this);
 		this.mpim = new RequestMpim(this);
 		this.oauth = new RequestOAuth(this);
+		this.pin = new RequestPin(this);
+		
+		// Set valid request methods
+		this.validRequestMethods.add("GET");
+		this.validRequestMethods.add("POST");
+		this.validRequestMethods.add("PUT");
+		this.validRequestMethods.add("DELETE");
+		this.validRequestMethods.add("HEAD");
+		this.validRequestMethods.add("OPTIONS");
+		this.validRequestMethods.add("PATCH");
 	}
 	
 	/**
@@ -250,6 +266,36 @@ public class Request {
 	}
 	
 	/**
+	 * <h2>pins()</h2>
+	 * 
+	 * <p>This method returns a class containing API calls 
+	 * for getting/adding/removing pins..</p>
+	 * </br>
+	 * 
+	 * <p>https://api.slack.com/methods#pins</p>
+	 * 
+	 * @return
+	 */
+	public RequestPin pins(){
+		return this.pin;
+	}
+	
+	/**
+	 * <h2>reactions()</h2>
+	 * 
+	 * <p>This method returns a class containing API calls 
+	 * for getting/adding/removing reactions.</p>
+	 * </br>
+	 * 
+	 * <p>https://api.slack.com/methods#reactions</p>
+	 * 
+	 * @return
+	 */
+	public RequestReaction reactions(){
+		return this.reaction;
+	}
+	
+	/**
 	 * <h2>get(targetURL)</h2>
 	 * 
 	 * <p>This method sends a GET request to the specified URL.</p>
@@ -260,6 +306,20 @@ public class Request {
 	 */
 	public JSONObject get(String targetURL) {
 		return request(targetURL, null, "GET");
+	}
+	
+	/**
+	 * <h2>get(targetURL, urlParameters)</h2>
+	 * 
+	 * <p>This method sends a GET request to the specified URL with
+	 * the specified parameters.</p>
+	 * 
+	 * @param targetURL
+	 * 
+	 * @return JSONObject
+	 */
+	public JSONObject get(String targetURL, Map<String, Object> urlParameters) {
+		return request(targetURL, urlParameters, "GET");
 	}
 	
 	/**
@@ -296,7 +356,7 @@ public class Request {
 		try {
 			connection = (HttpURLConnection) new URL(targetURL).openConnection();
 			
-			connection.setRequestMethod(method);
+			connection.setRequestMethod((method != null || method == "" || this.validRequestMethods.contains(method)) ? method:"GET");
 			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 			if(urlParameters != null)
 				connection.setRequestProperty("Content-Length", Integer.toString(urlParameters.toString().getBytes().length));
@@ -307,8 +367,7 @@ public class Request {
 			if(urlParameters != null) {
 				StringBuilder postData = new StringBuilder();
 				for (Map.Entry<String, Object> param : urlParameters.entrySet()) {
-					if (postData.length() != 0)
-						postData.append('&');
+					postData.append((postData.length() != 0) ? '&':"");
 					postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
 					postData.append('=');
 					postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
@@ -321,8 +380,6 @@ public class Request {
 			}else{
 				Slack.getLogger().log(Level.INFO, "Fetching data from \'" + connection.getURL().toString() + "\'");
 			}
-			
-			
 			
 			InputStream is = connection.getInputStream();
 			BufferedReader rd = new BufferedReader(new InputStreamReader(is));
